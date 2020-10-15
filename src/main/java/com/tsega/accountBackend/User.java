@@ -10,19 +10,28 @@ import java.util.List;
 
 @Entity
 public class User {
-    private @Id @GeneratedValue int id;
+    private @Id @GeneratedValue long id;
     private String email;
     private String password;
     private String name;
     private String birthday;
     private char gender;
 
+    public User(){}
     public User(String email, String password, String name, String birthday, char gender) {
         this.email = email;
         this.password = password;
         this.name = name;
         this.birthday = birthday;
         this.gender = gender;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public long getId() {
+        return id;
     }
 
     public String getEmail() {

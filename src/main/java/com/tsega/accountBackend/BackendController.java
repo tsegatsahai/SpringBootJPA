@@ -13,11 +13,14 @@ public class BackendController {
     UserDAO userServices = new UserDAO();
 
     private final UserRepository userRepo;
-   // public BackendController(){}
+
     public BackendController(UserRepository userRepo) {
         this.userRepo = userRepo;
     }
-
+   // public BackendController(){}
+//    public void setUserRepo(UserRepository userRepo){
+//        this.userRepo = userRepo;
+//    }
     @RequestMapping(method= RequestMethod.GET, path = "/hello/{name}")
     public String getInfo(@PathVariable String name){
         return "Hello there " + name;
@@ -34,6 +37,22 @@ public class BackendController {
     public User addUser(@RequestBody User user){
         //return userServices.addUser(user);
         return userRepo.save(user);
+    }
+
+    @PutMapping(path = "/updateUser/{id}")
+    public User updateUser(@RequestBody User newUser, @PathVariable long id){
+        return userRepo.findById(id).map(user -> {
+            user.setEmail(newUser.getEmail());
+            user.setBirthday(newUser.getBirthday());
+            user.setName(newUser.getName());
+            user.setPassword(newUser.getPassword());
+            user.setGender(newUser.getGender());
+            return userRepo.save(user);
+        }).orElseGet(() -> {
+            newUser.setId(id);
+            return userRepo.save(newUser);
+        });
+
     }
 
     @DeleteMapping(path = "/removeUser")
